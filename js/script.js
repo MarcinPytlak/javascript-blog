@@ -34,6 +34,8 @@ const titleClickHandler = function(event){
       optTitleSelector = '.post-title',
       optTitleListSelector = '.titles',
       optArticleTagsSelector = '.post-tags .list';
+      optArticleAuthorSelector = '.post .post-author';
+      optArticleWrapperSelector = 'post-author';
   
   function generateTitleLinks(customSelector = ''){
   
@@ -107,7 +109,6 @@ function tagClickHandler(event){
     }
   /* END LOOP: for each active tag link */
   /* find all tag links with "href" attribute equal to the "href" constant */
-    debugger
   const tagLinks = document.querySelectorAll('a[href="' + href + '"]')
   /* START LOOP: for each found tag link */
     for(let tagLink of tagLinks){
@@ -129,5 +130,34 @@ function addClickListenersToTags(){
   /* END LOOP: for each link */
 }
 }
-addClickListenersToTags();
+addClickListenersToTags(); 
 
+function generateAuthors(){
+  /*find all articles*/
+  const articles = document.querySelectorAll(optArticleSelector);
+  /*start loop*/
+  for(let article of articles){
+      const authorsList = article.querySelector(optArticleAuthorSelector);
+      let HTML = '';
+      const articleAuthor = article.getAttribute('data-author');
+      const linkHTML = '<a class="author" href="#'+ articleAuthor + '">' + articleAuthor +'</a>';
+      HTML = HTML + ' ' + linkHTML;
+      authorsList.innerHTML = HTML;
+  }
+}
+generateAuthors();
+
+function authorClickHandler(event){
+  event.preventDefault();
+  const clickedElement = this;
+  const href = clickedElement.getAttribute('href');
+  const authorTag = href.replace('#' , '');
+  generateTitleLinks('[data-author="' + authorTag + '"]');
+}
+function addClickListenersToAuthor(){
+  const authorLinks = document.querySelectorAll('.author');
+  for(let authorLink of authorLinks){
+    authorLink.addEventListener('click', authorClickHandler)
+  }
+}
+addClickListenersToAuthor();
